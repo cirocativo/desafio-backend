@@ -13,9 +13,24 @@
 
     <br />
     <ul>
-      {% for loja in transaction_list %}
+      {% for store in store_list %}
 
-      <li>R$ {{ loja.value|floatformat:2 }} loja {{loja.store.name}}</li>
+      <li>
+        <h2>Loja: {{ store.name}} - Dono: {{store.owner}}</h2>
+        <ul>
+          {% for transaction in store.transactions %}
+          <li>
+            <p>
+              Tipo: {{transaction.type_description}} - Valor: R$
+              {{transaction.value|floatformat:2}} - card: {{transaction.card}} -
+              CPF: {{transaction.cpf}} - Data: {{transaction.date}} - Hora:
+              {{transaction.hour}}
+            </p>
+          </li>
+          {% endfor %}
+        </ul>
+        <h3>Saldo: R$ {{store.balance|floatformat:2}}</h3>
+      </li>
 
       {% endfor %}
     </ul>
