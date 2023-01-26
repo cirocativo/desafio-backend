@@ -11,7 +11,26 @@ class TransactionSerializer(serializers.Serializer):
     card = serializers.CharField()
     hour = serializers.TimeField()
 
-    store = StoreSerializer()
+    store = StoreSerializer(write_only=True)
+
+    type_description = serializers.SerializerMethodField()
+
+    def get_type_description(self, obj: Transaction) -> str:
+        transaction_types_descriptions = [
+            'débito',
+            'boleto',
+            'financiamento',
+            'crédito',
+            'recebimento empréstimo',
+            'vendas',
+            'recebimento TED',
+            'recebimento DOC',
+            'aluguel'
+        ]
+
+        transaction_type = int(obj.type_transaction) - 1
+
+        return transaction_types_descriptions[transaction_type]
 
     def create(self, validated_data: dict):
         store_data = validated_data.pop('store')

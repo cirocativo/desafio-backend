@@ -2,8 +2,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms import UploadFileForm
 from .models import Transaction
+from stores.models import Store
 import ipdb
 from .serializers import TransactionSerializer
+from stores.serializers import StoreSerializer
 
 def upload_file(request):
     if request.method == 'POST':
@@ -11,14 +13,54 @@ def upload_file(request):
         if form.is_valid():
             # print (request.FILES['file'])
             # form.save()
-            t = handle_uploaded_file(request.FILES['file'])
-            return render(request, 'success.html', {'transaction_list': t})
+            refresh_database(request.FILES['file'])
+
+            store_list = get_stores_from_database()
+
+            add_transactions_to_store_list(store_list)
+
+            return render(request, 'success.html', {'store_list': store_list})
             
     else:
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
 
-def handle_uploaded_file(file):
+def get_stores_from_database():
+
+    stores = Store.objects.all()
+
+    serializer = StoreSerializer(stores, many=True)
+
+    transactions = Transaction.objects.all()
+
+    serializer2 = TransactionSerializer(transactions, many=True)
+
+    # print(serializer.data)
+
+    return serializer.data
+
+def add_transactions_to_store_list(store_list):
+    for store in store_list:
+        
+        # ipdb.set_trace()
+        transactions = Transaction.objects.filter(store_id = store['id'])
+        serializer = TransactionSerializer(transactions, many = True)
+        store['transactions'] = serializer.data
+        
+        store['balance'] = calculate_total_value(serializer.data)
+
+def refresh_database(file):
+    
+    transactions_list = get_transactions_list_from_file(file)
+
+    for transaction in transactions_list:
+        
+        serializer = TransactionSerializer(data=transaction)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+
+def get_transactions_list_from_file(file):
     
     cnab_field_sizes = [1, 8, 10, 11, 12, 6, 14, 19]
     
@@ -33,33 +75,38 @@ def handle_uploaded_file(file):
         "name",
     ]
 
-
     transaction_dict_list = parse_cnab_file(file, fields, cnab_field_sizes)
     
     convert_to_transaction_model(transaction_dict_list)
 
-    print(transaction_dict_list)
-
-    for transaction_dict in transaction_dict_list:
-        
-        # transaction = Transaction(**transaction_dict)
-        
-        serializer = TransactionSerializer(data=transaction_dict)
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save()
-
     return transaction_dict_list
 
+def calculate_total_value(transactions_list):
+    transaction_types = [1 , -1, -1, 1, 1, 1, 1, 1, -1]
+    
+    balance = 0
+
+    for transaction in transactions_list:
+        
+        current_value = transaction['value']
+
+        current_type = int(transaction['type_transaction']) - 1
+
+        balance += transaction_types[current_type] * current_value
+
+    return balance
+
+
 def convert_to_transaction_model(list):
-    for i in range(len(list)):
+    for obj in list:
         store = {
-            'name': list[i]['name'],
-            'owner': list[i]['owner'],
+            'name': obj['name'],
+            'owner': obj['owner'],
         }
-        list[i].pop('name')
-        list[i].pop('owner')
-        list[i]['store'] = store
+        obj.pop('name')
+        obj.pop('owner')
+        obj['store'] = store
+        obj['value'] = int(obj['value'])/100
 
 def parse_cnab_file(file, field_names_list, cnab_field_sizes_list):
     objects_list = []
