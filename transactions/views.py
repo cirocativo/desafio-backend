@@ -1,7 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms import UploadFileForm
+from .models import Transaction
 import ipdb
+
 
 def upload_file(request):
     if request.method == 'POST':
@@ -16,9 +18,9 @@ def upload_file(request):
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
 
-def handle_uploaded_file(f):
+def handle_uploaded_file(file):
     
-    cnab_fields_sizes = [1, 8, 10, 11, 12, 6, 14, 19]    
+    cnab_field_sizes = [1, 8, 10, 11, 12, 6, 14, 19]    
     
     fields = [
         "tipo",
@@ -29,31 +31,47 @@ def handle_uploaded_file(f):
         "hora",
         "donoLoja",
         "nomeLoja",
-]
-    objects = []
+    ]
+
+    transaction_dict_list = parse_cnab_file(file, fields, cnab_field_sizes)
+    
+    for transaction_dict in transaction_dict_list:
+        
+        transaction = Transaction(**transaction_dict)
+        
+        transaction.save()
+
+    
+
+
+
+def parse_cnab_file(file, field_names_list, cnab_field_sizes_list):
+    objects_list = []
     while True:
     
         index_field = 0
         object = {}
-        cnab_line: str = f.readline().decode()[:-1]
+
+        cnab_line_str: str = file.readline().decode()[:-1]
         
-        if not cnab_line:
+        if not cnab_line_str:
             break
+
         last_index = 0
-        for field_size in cnab_fields_sizes:
+        for field_size in cnab_field_sizes_list:
             
-            field_value = cnab_line[last_index:last_index + field_size]
+            field_value = cnab_line_str[last_index : last_index + field_size]
             
-            current_field = fields[index_field]
+            current_field = field_names_list[index_field]
+
             object[current_field] = field_value
+
             index_field += 1
             last_index += field_size
-        objects.append(object)
+
+        objects_list.append(object)
 
         # ipdb.set_trace()
-    print(objects)
-
+    print(objects_list)
     
-
-def success(request):
-    return render(request, 'success.html')
+    return objects_list
