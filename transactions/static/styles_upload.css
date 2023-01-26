@@ -11,36 +11,27 @@ h1 {
   border: 2px solid black;
 }
 
-ul {
+main {
+  width: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  list-style: none;
-  padding: 0;
 }
 
-li {
-  width: 80%;
-}
-
-li p {
-  font-weight: bold;
-}
-
-table {
-  border: 1px solid black;
-}
-
-th {
-  text-align: center;
+form {
+  display: flex;
+  flex-direction: column;
   background-color: #ffaa;
-  border-right: 1px solid black;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  height: 20rem;
+  width: 40rem;
 }
 
-td {
-  border-top: 1px solid black;
-  border-right: 1px solid black;
-  padding: 0.5rem 0.5rem;
+form .send_button {
   background-color: rgba(0, 255, 255, 0.3);
+  width: 5rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
 }

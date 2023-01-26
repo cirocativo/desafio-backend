@@ -7,6 +7,12 @@ import ipdb
 from .serializers import TransactionSerializer
 from stores.serializers import StoreSerializer
 
+def show_transactions(request):
+    
+    store_list = get_stores_from_database()
+
+    return render(request, 'transactions.html', {'store_list': store_list})
+
 def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -15,11 +21,7 @@ def upload_file(request):
             # form.save()
             refresh_database(request.FILES['file'])
 
-            store_list = get_stores_from_database()
-
-            add_transactions_to_store_list(store_list)
-
-            return render(request, 'success.html', {'store_list': store_list})
+            return redirect('show_transactions')
             
     else:
         form = UploadFileForm()
@@ -31,11 +33,7 @@ def get_stores_from_database():
 
     serializer = StoreSerializer(stores, many=True)
 
-    transactions = Transaction.objects.all()
-
-    serializer2 = TransactionSerializer(transactions, many=True)
-
-    # print(serializer.data)
+    add_transactions_to_store_list(serializer.data)
 
     return serializer.data
 

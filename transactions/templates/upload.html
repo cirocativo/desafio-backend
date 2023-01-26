@@ -5,14 +5,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles_upload.css' %}" />
     <title>BackEnd Challenge</title>
   </head>
   <body>
-    <h1 class="terte">aí sim</h1>
-    <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %} {{form.as_p}}
-      <input type="submit" />
-    </form>
+    <header>
+      <h1>Upload de arquivo CNAB</h1>
+    </header>
+    <main>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {{form.as_p}}
+        <input class="send_button" type="submit" />
+      </form>
+    </main>
   </body>
 </html>

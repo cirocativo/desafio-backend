@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <title>BackEnd Challenge</title>
+  </head>
+  <body>
+    <header>
+      <h1>Transações</h1>
+    </header>
+
+    <br />
+    <ul>
+      {% for store in store_list %}
+
+      <li>
+        <h2>Loja: {{ store.name}}</h2>
+        <p>Dono: {{store.owner}}</p>
+        <table>
+          <tr class="table_header">
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Cartão</th>
+            <th>CPF</th>
+            <th>Data</th>
+            <th>Hora</th>
+          </tr>
+          {% for transaction in store.transactions %}
+          <tr>
+            <td>{{transaction.value|floatformat:2}}</td>
+            <td>{{transaction.type_description|capfirst}}</td>
+            <td>{{transaction.card}}</td>
+            <td>{{transaction.cpf}}</td>
+            <td>{{transaction.date}}</td>
+            <td>{{transaction.hour}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+        <h3>Saldo: R$ {{store.balance|floatformat:2}}</h3>
+      </li>
+      <hr>
+      <hr>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
