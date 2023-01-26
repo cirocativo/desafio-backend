@@ -1,12 +1,16 @@
 from django.db import models
 
 class Transaction(models.Model):
-    tipo = models.IntegerField()
-    data = models.DateField()
-    valor = models.FloatField()
+    type_transaction = models.IntegerField()
+    date = models.DateField()
+    value = models.FloatField()
     cpf = models.CharField(max_length=11)
-    cartao = models.CharField(max_length=12)
-    hora = models.TimeField()
-    donoLoja = models.CharField(max_length=14)
-    nomeLoja = models.CharField(max_length=19)
+    card = models.CharField(max_length=12)
+    hour = models.TimeField()
+
+    store = models.ForeignKey(
+        'stores.Store',
+        on_delete = models.CASCADE,
+        related_name = 'transactions'
+    )
 

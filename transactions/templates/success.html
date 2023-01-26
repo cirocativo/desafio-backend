@@ -1,12 +1,30 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sucesso!</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <title>Document</title>
   </head>
   <body>
-    <h1>Parabéns, deu tudo certo!</h1>
+    <h1>Transações</h1>
+
+    <br />
+    <ul>
+      {% for loja in transaction_list %}
+
+      <li>R$ {{ loja.value|floatformat:2 }} loja {{loja.store.name}}</li>
+
+      {% endfor %}
+    </ul>
   </body>
 </html>
+
+<!-- for lista de mercados in listadelistasdemercados
+  for mercado in lista de mercados
+  <p>Mercado {{mercado.nome}}</p>
+    for transacao in mercado.transacoes
+      <p>transacao {{transacao.info}}</p>
+    <p>valor total: {{mercado.valorTotal}}</p>  -->

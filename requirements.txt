@@ -3,6 +3,7 @@ asttokens==2.2.1
 backcall==0.2.0
 decorator==5.1.1
 Django==4.1.5
+djangorestframework==3.14.0
 executing==1.2.0
 ipdb==0.13.11
 ipython==8.8.0
@@ -15,6 +16,7 @@ prompt-toolkit==3.0.36
 ptyprocess==0.7.0
 pure-eval==0.2.2
 Pygments==2.14.0
+pytz==2022.7.1
 six==1.16.0
 sqlparse==0.4.3
 stack-data==0.6.2
