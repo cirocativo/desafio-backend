@@ -1,5 +1,16 @@
-# desafio-backend
-interface web que aceita upload do arquivo CNAB, normaliza os dados e armazena-os em um banco de dados relacional e exibe essas informações em tela.
+# Desafio-backend
+Interface web que aceita upload de arquivo CNAB, normaliza os dados e armazena-os em um banco de dados relacional, exibindo as informações em tela. A aplicação mostra transações realizadas por lojas e o saldo final de cada uma.
+
+## Linguagem e Tecnologias utilizadas no Projeto
+* Python
+* Framework Django
+* SQlite3
+* Views com Django Rest Framework
+* ORM do Django
+* Serializers
+* Templates Django
+* HTML
+* CSS
 
 ## Instalação
 
@@ -24,19 +35,20 @@ source venv/bin/activate
 
 `python manage.py migrate`
 
-**5. Execute o comando para iniciar o servidor**
-
-`python manage.py runserver`
 
 
 
 ## Funcionamento
+
+**Execute o comando abaixo para iniciar o servidor**
+
+`python manage.py runserver`
 
 Existem duas URL's disponíveis para acesso:
 
 1. **http://127.0.0.1:8000/transactions/upload/** - para fazer upload do arquivo CNAB
 2. **http://127.0.0.1:8000/transactions/show/** - para ver as informações guardadas no banco provenientes de todos os arquivos CNAB que já foram enviados. As informações são organizadas por loja.
 
-No repositório há um exemplo de arquivo CNAB (cnab_example.txt). Ele deve seguir a seguinte estrutura:
+No repositório há um exemplo de arquivo CNAB (cnab_example.txt). Ele deve seguir conforme a estrutura abaixo:
 
 ![cnab documentation](https://github.com/cirocativo/desafio-backend/blob/master/assets/cnab_documentation.png)
