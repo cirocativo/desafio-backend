@@ -29,4 +29,12 @@ source venv/bin/activate
 `python manage.py runserver`
 
 
+
 ## Funcionamento
+
+Existem duas URL's disponíveis para acesso:
+
+1. **http://127.0.0.1:8000/transactions/upload/** - para fazer upload do arquivo CNAB
+2. **http://127.0.0.1:8000/transactions/show/** - para ver as informações guardadas no banco provenientes de todos os arquivos CNAB que já foram enviados.
+
+No repositório há um arquivo exemplo de arquivo CNAB (cnab_example.txt). Ele deve seguir a seguinte estrutura:
