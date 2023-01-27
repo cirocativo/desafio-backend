@@ -31,7 +31,7 @@
           </tr>
           {% for transaction in store.transactions %}
           <tr>
-            <td>{{transaction.value|floatformat:2}}</td>
+            <td>R$ {{transaction.value|floatformat:2}}</td>
             <td>{{transaction.type_description|capfirst}}</td>
             <td>{{transaction.card}}</td>
             <td>{{transaction.cpf}}</td>
@@ -42,8 +42,8 @@
         </table>
         <h3>Saldo: R$ {{store.balance|floatformat:2}}</h3>
       </li>
-      <hr>
-      <hr>
+      <hr />
+      <hr />
       {% endfor %}
     </ul>
   </body>

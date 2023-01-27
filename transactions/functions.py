@@ -2,6 +2,7 @@ from .serializers import TransactionSerializer
 from stores.serializers import StoreSerializer
 from .models import Transaction
 from stores.models import Store
+import ipdb
 
 def refresh_database(file):
     
@@ -34,8 +35,17 @@ def get_transactions_list_from_file(file):
     
     convert_to_transaction_model(transaction_dict_list)
 
+    alter_datetime(transaction_dict_list)
+
     return transaction_dict_list
 
+
+def alter_datetime(transaction_dict_list):
+    for transaction in transaction_dict_list:
+        date = transaction["date"]
+        hour = transaction["hour"]
+        transaction["date"] = date[:4] + '-' + date[4:6] + '-' + date[6:8]
+        transaction["hour"] = hour[:2] + ':' + hour[2:4] + ':' + hour[4:6]
 
 def parse_cnab_file(file, field_names_list, cnab_field_sizes_list):
     objects_list = []
